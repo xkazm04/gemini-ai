@@ -3,34 +3,9 @@ from models import File as FileModel
 from sqlalchemy.orm import Session
 from database import SessionLocal
 from file_processor.yaml_indexer import read_vectors, vector_load
-from file_processor.file_store import get_file, post_file, update_file_embed_status
 
 router = APIRouter()
 
-@router.get("/file", status_code=status.HTTP_200_OK)
-async def get_all_files():
-    files = get_file(db=SessionLocal())
-    if len(files) == 0:
-        return {"message": "No files"}
-    return files
-
-@router.post("/file")
-async def create_file(file: UploadFile = FastAPIFile(...)):
-    try: 
-        post_file(db=SessionLocal(), data=file)
-        return {"message": "Success"}
-    except Exception as e:
-        raise HTTPException(status_code=400, detail=str(e))
-    
-@router.put("/file/{id}/embed")
-async def update_file_embed (id: int):
-    try: 
-        vector_load(id=id)
-        update_file_embed_status(db=SessionLocal(), id=id)
-        return {"message": "Success"}
-    except Exception as e:
-        raise HTTPException(status_code=400, detail=str(e))
-    
     
 # Answer question to the vector store
 @router.get("/file/read")
