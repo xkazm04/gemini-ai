@@ -27,12 +27,13 @@ def get_user_countdown(db: Session, user_id: str):
         raise HTTPException(status_code=400, detail="User not found")
     
     
-def update_countdown_time(db: Session, id: str, data: TimeInput):
+def pause_countdown(db: Session, id: str, data: TimeInput):
     db_cd = db.query(Countdown).filter(Countdown.id == id).first()
     if db_cd is None:
         raise HTTPException(status_code=404, detail="Countdown not found")
     try:
         db_cd.elapsed = data.elapsed
+        db_cd.state = 'paused'
         db.commit()
         db.refresh(db_cd)
         return db_cd
@@ -40,10 +41,10 @@ def update_countdown_time(db: Session, id: str, data: TimeInput):
         db.rollback()
         raise HTTPException(status_code=400, detail="Failed to update countdown")
     
-def finish_countdown(db: Session, id: str, data: TimeStateInput):
+def finish_countdown(db: Session, id: str):
     try:
         db_cd = db.query(Countdown).filter(Countdown.id == id).first()
-        db_cd.state = data.state
+        db_cd.state = 'finished'
         db.commit()
         db.refresh(db_cd)
         return db_cd

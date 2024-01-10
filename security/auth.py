@@ -5,7 +5,7 @@ from starlette.responses import RedirectResponse
 from datetime import datetime, timedelta
 from typing import Optional
 from database import SessionLocal
-from .security import create_access_token
+from ..auth.security import create_access_token
 
 db: Session = SessionLocal()
 

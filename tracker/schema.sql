@@ -134,3 +134,5 @@ CREATE TABLE tracker_completed (
     FOREIGN KEY (habit_id) REFERENCES habits(id)
 );
 
+ALTER TABLE tracker_completed ADD COLUMN volume_units TEXT;
+ALTER TABLE tracker_completed ADD COLUMN volume_actual INTEGER;

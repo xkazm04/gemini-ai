@@ -26,9 +26,24 @@ class Habit(Base):
     type = Column(String, default="Habit", nullable=True)
     volume_start = Column(Integer, nullable=True)
     volume_units = Column(String, nullable=True)
+    volume_target = Column(Integer, nullable=True)
     volume_actual = Column(Integer, nullable=True)
     subscribed = Column(Integer, default=0, nullable=True)	
     ai = Column(Boolean, default=False)
+    
+class HabitInput(BaseModel):
+    userId: str
+    dayType: List[bool]
+    name: str
+    category: int
+    dateFrom: Optional[str]
+    dateTo: Optional[str]
+    isRecurring: Optional[bool]
+    recurrenceType: Optional[str]
+    recurrenceInterval: Optional[int]
+    specificDays: Optional[List[bool]]
+    volume_start: Optional[int]  = None
+    volume_units: Optional[str]  = None
     
     
 class HabitTemplate(Base):
@@ -105,17 +120,7 @@ class HabitFromTemplate(BaseModel):
     template_id: str
     user_id: str
     
-class HabitInput(BaseModel):
-    userId: str
-    dayType: List[bool]
-    name: str
-    category: int
-    dateFrom: Optional[str]
-    dateTo: Optional[str]
-    isRecurring: Optional[bool]
-    recurrenceType: Optional[str]
-    recurrenceInterval: Optional[int]
-    specificDays: Optional[List[bool]]
+
     
 class Task(Base):
     __tablename__ = "tracker_tasks"
@@ -133,7 +138,8 @@ class TaskInput(BaseModel):
     created_at: datetime = Field(default_factory=datetime.utcnow)
     
 class TaskUpdate(BaseModel):
-    completed: bool
+    completed: Optional[bool] = None
+    name: Optional[str] = None
     
 class Completed(Base):
     __tablename__ = "tracker_completed"
@@ -141,11 +147,15 @@ class Completed(Base):
     habit_id = Column(UUID(as_uuid=True))
     day = Column(String)
     completed = Column(Boolean, default=True)
+    volume_actual = Column(Integer, nullable=True)
+    volume_units = Column(String, nullable=True)
 
 class CompInput(BaseModel):
-    habit_id: Optional[str]
-    day: Optional[str]
-    completed: Optional[str]
+    habit_id: str
+    day: str
+    completed: Optional[bool]
+    volume_actual: Optional[int] = None
+    volume_units: Optional[str] = None
 
     
 class NoteInput(BaseModel):
@@ -153,7 +163,15 @@ class NoteInput(BaseModel):
     note_created: str
     note: str
 
-    
+class Stats(BaseModel):
+    habit_id: str
+    category: int
+    habit_name: str
+    total_instances: int
+    completed_instances: int
+    weeks_elapsed: int
+    volume_units: Optional[str]
+    completed_volume: Optional[int]
     
 class CountdownCreate(BaseModel):
     user_id: str
@@ -190,14 +208,12 @@ class TimeInput(BaseModel):
 class User(Base):
     __tablename__ = "users"
     id = Column(UUID(as_uuid=True), primary_key=True, index=True, default=uuid.uuid4)
-    username = Column(String)
-    hashed_password = Column(String)
+    username = Column(String, nullable=True)
     email = Column(String)
-    role = Column(String)
+    role = Column(String, nullable=True)
 
 class UserInput (BaseModel):
-    username: str
-    password: str
+    username: Optional[str]
     email: str  
     
 class NoteInput(BaseModel):
@@ -217,3 +233,9 @@ class Note(Base):
     text = Column(String)
     ai = Column(Boolean, default=False)
     
+class Categories(Base):
+    __tablename__ = "categories"
+    id = Column(Integer, primary_key=True, index=True, autoincrement=True)
+    label = Column(String)
+    description = Column(String)
+    examples = Column(String)

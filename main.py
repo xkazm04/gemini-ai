@@ -19,6 +19,8 @@ sentry_sdk.init(
     send_default_pii=True,
 )
 
+
+
 load_dotenv(find_dotenv())
 
 logger = logging.getLogger(__name__)
@@ -102,6 +104,8 @@ async def general_exception_handler(request: Request, exc: Exception):
 @app.get("/")
 async def root():
     return {"message": "Hello World"}
+
+
 
 
 # @app.on_event("startup")
