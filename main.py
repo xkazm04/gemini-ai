@@ -12,6 +12,8 @@ from exceptions import UnicornException
 import logging
 import time
 
+#jjLvpAUbWKs7fw1z
+
 import sentry_sdk
 sentry_sdk.init(
     dsn="https://f71e49ef94245eda96443ae6fff4040c@o1223284.ingest.sentry.io/4506444979240960",
@@ -25,7 +27,7 @@ load_dotenv(find_dotenv())
 
 logger = logging.getLogger(__name__)
 
-CONNECTION_STRING = "postgresql+psycopg2://admin:admin@127.0.0.1:5433/vectordb"
+CONNECTION_STRING = "postgresql+psycopg2://admin:admin@127.0.0.1:5432/postgres"
 COLLECTION_NAME = "vectordb"
 
 # Update namespace to reflect PGVector
@@ -82,8 +84,8 @@ app.add_middleware(TimeMiddleware)
 app.include_router(file.router)
 app.include_router(tracker.router)
 app.include_router(user.router)
+print(tracker.router)
 
-# start_ai_scheduler()
     
 @app.exception_handler(UnicornException)
 async def unicorn_exception_handler(request: Request, exc: UnicornException):

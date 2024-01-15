@@ -5,7 +5,7 @@ from sqlalchemy.orm import sessionmaker
 import os
 
 
-SQLALCHEMY_DATABASE_URL = os.getenv("DBCONN") or "postgresql://postgres:1234@localhost:5432/postgres"
+SQLALCHEMY_DATABASE_URL = "postgresql://admin:admin@localhost:5432/vectordb"
 engine = create_engine(
     SQLALCHEMY_DATABASE_URL
 )

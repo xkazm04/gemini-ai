@@ -1,0 +1,17 @@
+python-dotenv
+fastapi
+uvicorn
+sentry_sdk
+langchain
+sqlalchemy
+locust
+apscheduler
+pytz
+langchain_experimental
+llama_index
+nest_asyncio
+pymongo
+redis
+rq
+bcrypt
+psycopg2
